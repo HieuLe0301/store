@@ -2,7 +2,20 @@ import java.util.*;
 import java.io.*;
 
 class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        //Read in data from usersData.txt
+        int ud = -1;
+        BufferedReader br = new BufferedReader(new FileReader("usersData.txt"));
+        String line;
+        ArrayList<User> users = new ArrayList<>();
+        User a = new User();
+        while ((line = br.readLine()) != null) {
+            a.setUsername(line.split(",")[0]);  
+            a.setPassword(line.split(",")[1]);  
+            users.add(a);
+        }
+        if (users.size()>0) ud = 1; else ud = 0;
+
         System.out.println("Enter: ");
         System.out.println("0: Exit");
         System.out.println("1: Register");
@@ -61,29 +74,26 @@ class Main {
                     }
                 }
             } else if (k==3) {                                                  // Register
-                try {
-                    FileOutputStream fos = new FileOutputStream("usersData.txt",true);
-                    System.out.println("Enter your username: ");
-                    sc.nextLine();
-                    String username = sc.nextLine();
-                    System.out.println("Enter your password: ");
-                    String password = sc.nextLine();
-                    String data = "Hello World!";
-                    BufferedReader br = new BufferedReader(new FileReader("usersData.txt"));
-                    if (br.readLine() != null){
-                        data = "\n"+username + "," + password;
-                    } else {
-                        data = username + "," + password;
-                    }
-                    br.close(); 
-                    byte[] datab = data.getBytes();
-                    fos.write(datab);
-                    fos.close();
-                    k = -1;
-                    program_run = 0;
-                } catch (Exception e) {
-                    e.printStackTrace();
+                FileOutputStream fos = new FileOutputStream("usersData.txt",true);
+                System.out.println("Enter your username: ");
+                sc.nextLine();
+                String username = sc.nextLine();
+                System.out.println("Enter your password: ");
+                String password = sc.nextLine();
+                String data = "Hello World!";
+                if (ud==0){
+                    data = username + "," + password;
+                } else {
+                    data = "\n"+username + "," + password;
                 }
+                br.close(); 
+                byte[] datab = data.getBytes();
+                fos.write(datab);
+                fos.close();
+                k = -1;
+                program_run = 0;   
+            } else if (k==4){
+                
             }
 
 
