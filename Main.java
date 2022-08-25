@@ -3,25 +3,15 @@ import java.io.*;
 
 class Main {
     public static void main(String[] args) throws Exception {
-        //Read in data from usersData.txt
-        int ud = -1;
-        String line;
-        ArrayList<User> users = new ArrayList<>();
-        User user = new User();
-        BufferedReader br = new BufferedReader(new FileReader("customersData.txt"));
-        while ((line = br.readLine()) != null) {
-            user.setUsername(line.split(",")[0]);  
-            user.setPassword(line.split(",")[1]);  
-            users.add(user);
-        }
-        if (users.size()>0) ud = 1; else ud = 0;
+        //Read in data from membersData.txt
+        filesManager fm = new filesManager();
+        ArrayList<Member> members = fm.readMembers();
+        int ud = members.size();
         
-        //initiate the i/o
-        FileOutputStream fos = new FileOutputStream("customersData.txt",true);
+        
+        //initiate the i/o 
         Scanner sc = new Scanner(System.in);
-
-
-        //first instruction 
+        
         System.out.println("Enter: ");
         System.out.println("0: Exit");
         System.out.println("1: Register");
@@ -42,9 +32,12 @@ class Main {
         * k = 7 : Admin menu
         */
         
+        Customer customer = new Customer();
+        // Member member = new Member();
+        Admin admin = new Admin();
+        
+        
         int program_run = 1;
-        
-        
         while (program_run != 0) {
             if (k == 0) {                                                       //Login Menu
                 int input = -2;
@@ -85,64 +78,75 @@ class Main {
                         }
                     }
                 }
-            } else if (k==3) {                                                  // Register
-                System.out.println("Enter your username: ");
+            } else if (k==3) {
                 sc.nextLine();
+                System.out.println("Enter your username: ");
                 String username = sc.nextLine();
                 System.out.println("Enter your password: ");
                 String password = sc.nextLine();
-                String data = "Hello World!";
-                if (ud==0){
-                    data = username + "," + password;
-                } else {
-                    data = "\n"+username + "," + password;
-                }
-                byte[] datab = data.getBytes();
-                fos.write(datab);
-                k = -1;
+
+                customer.register(username, password, ud);
                 program_run = 0;   
-            } else if (k==4 && ud == 1){
-                for (int i=0; i < users.size(); i++){
-                    System.out.println(users.get(i).getUsername());
-                    System.out.println(users.get(i).getPassword());
-                }
-            } else if (k==4 && ud ==0){
-                System.out.println("There is no user in database. Please log in: ");
-                k = 3;
-            } else if (k==5){
-                int exit = 0;
-                int ct = 0;
-                sc.nextLine();
-                Admin admin = new Admin();
-                while (exit != 1) {
-                    System.out.println("Enter Admin username: ");
-                    String aUsername = sc.nextLine();
-                    System.out.println("Enter Admin password: ");
-                    String aPassword = sc.nextLine();
-                    if (!aUsername.equals(admin.getUsername()) || !aPassword.equals(admin.getPassword())){
-                        System.out.println("Wrong username or password!!");
-                        if (ct<3){
-                            System.out.println("You have "+(ct+1)+" chances left to log in ");
-                            ct += 1;
-                        } else {
-                            System.out.println("System exiting for too many failed attempts to log in as Admin");
-                            System.exit(1);
-                        }
-                    } else {
-                        System.out.println("Welcome Admin!");
-                        k = 7;
-                        exit = 1;
-                    }
-                }
-            } else if (k==7){
-                System.out.println("This is the Admin Menu: ");
-                program_run = 0;
             }
+            // } else if (k==4 && members.size() == 1){
+            //     for (int i=0; i < members.size(); i++){
+            //         System.out.println(members.get(i).getUsername());
+            //         System.out.println(members.get(i).getPassword());
+            //     }
+            // } else if (k==4 && members.size() ==0){
+            //     System.out.println("There is no user in database. Please log in: ");
+            //     k = 3;
+            // } else if (k==5){
+            //     int exit = 0;
+            //     int ct = 0;
+            //     sc.nextLine();
+
+            //     while (exit != 1) {
+            //         System.out.println("Enter Admin username: ");
+            //         String aUsername = sc.nextLine();
+            //         System.out.println("Enter Admin password: ");
+            //         String aPassword = sc.nextLine();
+            //         if (!aUsername.equals(admin.getUsername()) || !aPassword.equals(admin.getPassword())){
+            //             System.out.println("Wrong username or password!!");
+            //             if (ct<3){
+            //                 System.out.println("You have "+(ct+1)+" chances left to log in ");
+            //                 ct += 1;
+            //             } else {
+            //                 System.out.println("System exiting for too many failed attempts to log in as Admin");
+            //                 System.exit(1);
+            //             }
+            //         } else {
+            //             System.out.println("Welcome Admin!");
+            //             k = 7;
+            //             exit = 1;
+            //         }
+            //     }
+            // } else if (k==6){
+            //     int i = -2;
+            //     int exit = 0;
+            //     while (exit != 1){
+            //         if(!sc.hasNextInt()){
+                        
+            //         } else {
+            //             i = sc.nextInt();
+            //             if (i!= 0 && i!= 1 && i!= 2){
+
+            //             } else {
+            //                 switch (i){
+            //                     case 0: k = 0;
+            //                     case 1: k = 6;
+            //                     case 2: k = 7;
+            //                 }
+            //                 exit = 1;
+            //             }
+            //         }
+            //     }
+            // } else if (k==7){
+            //     System.out.println("This is the Admin Menu: ");
+            //     program_run = 0;
+            // }
         }
         
         //closing i/o
-        fos.close();
-        sc.close();
-        br.close(); 
     }
 }
